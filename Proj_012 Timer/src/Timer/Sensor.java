@@ -30,7 +30,7 @@ public class Sensor {
 		int oldValue = this.value;
 		this.value = randomGenerator.nextInt(11) + 5;
 		//System.out.println("valeur = " + this.value);
-		this.pcs.firePropertyChange(this.VALUE_NAME, oldValue, this.value);
+		this.pcs.firePropertyChange(VALUE_NAME, oldValue, this.value);
 	}
 	
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {

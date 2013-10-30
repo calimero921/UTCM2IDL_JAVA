@@ -38,10 +38,10 @@ public class Mean implements PropertyChangeListener{
 			total = total + (Integer) evt.getNewValue();
 			
 			count ++;
-			this.pcs.firePropertyChange(this.COUNT_NAME, oldCount, this.count);
+			this.pcs.firePropertyChange(COUNT_NAME, oldCount, this.count);
 			
 			average = total/count;
-			this.pcs.firePropertyChange(this.AVERAGE_NAME, oldAverage, this.average);
+			this.pcs.firePropertyChange(AVERAGE_NAME, oldAverage, this.average);
 			//System.out.println("Valeur : " + evt.getNewValue() + " => Moyenne : " + average);
 		}
 	}
