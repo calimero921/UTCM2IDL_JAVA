@@ -3,7 +3,7 @@ package Listen;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-//création d'un objet ChaNumber qui recevra des notification
+//création d'un objet ChaNumber qui recevra des notifications
 public class CharNumber implements PropertyChangeListener{
 
 	//prise en charge des notifications
