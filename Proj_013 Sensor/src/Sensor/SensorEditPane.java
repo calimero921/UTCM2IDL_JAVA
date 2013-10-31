@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+//listener d'action pour l'interface
 public class SensorEditPane extends JPanel implements ActionListener {
 	private JTextField textfieldName = new JTextField(20);
 	private JTextField textfieldDelay = new JTextField(20);
@@ -32,6 +33,7 @@ public class SensorEditPane extends JPanel implements ActionListener {
 		rightBox.add(this.textfieldInterval);
 		this.add(rightBox,BorderLayout.CENTER);	
 		
+		//créé un listener de bouton valider pour le panneau actuel
 		validateButton.addActionListener(this);
 		this.add(validateButton,BorderLayout.SOUTH);
 	}
@@ -47,8 +49,11 @@ public class SensorEditPane extends JPanel implements ActionListener {
 		textfieldInterval.setText(Long.toString(localSensor.getInterval()));
 	}
 
+
+	//prise en charge des retours pour les listeners action interface (quelqu'en soit la source)
 	@Override
 	public void actionPerformed(ActionEvent evt) {
+		//appuye sur le bouton validation
 		if(evt.getSource().equals(validateButton)){
 			frame.validateEdit(getSensor());
 		}

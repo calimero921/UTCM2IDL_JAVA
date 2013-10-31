@@ -20,6 +20,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+//activation de listeneurs pour ses objet fils
 public class SensorListFrame extends JFrame implements PropertyChangeListener, ActionListener {
 	private int width;
 	private int height;
@@ -28,16 +29,18 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 	private Color foreground;
 	private Color background;
 
-	private JList capteurListe = new JList();
 	private SensorModel sensors;
+	private JList capteurListe = new JList();
 	private JFileChooser fileDialog = new JFileChooser();
 
+	//création des menus
 	private JMenuItem openItem = new JMenuItem("Ouvrir");
 	private JMenuItem saveItem = new JMenuItem("Enregistrer");
 	private JMenuItem quitItem = new JMenuItem("Quitter");
 	private JMenuItem addItem = new JMenuItem("Ajouter");
 	private JMenuItem deleteItem = new JMenuItem("Supprimer");
 
+	//création des panneaux internes
 	private SensorEditPane editPane = new SensorEditPane(this);
 	private SensorMeanPane meanPane = new SensorMeanPane();
 
@@ -49,16 +52,20 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 		this.foreground = f;
 		this.background = b;
 		
+		//créé un listener de JList pour gestion de l'interraction 
 		this.capteurListe.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
+				//activation sur changement de selection
 				if(e.getValueIsAdjusting() == false) {
 					select();
 				}
 			}
 		});
 		this.sensors = liste;
+		//créé un listener de la liste de sensor pour la fenetre (et ses fils)
 		liste.addPropertyChangeListener(this);
+		//créé un listener de l'objet moyenne de la liste de sensor pour la fenetre (et ses fils)
 		liste.getMoyenne().addPropertyChangeListener(this);
 
 		this.capteurListe.setModel(sensors.getSensorList());
@@ -69,7 +76,9 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 
 		//indique de terminer le programme en quittant la fenetre.
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//optimise les éléments de la fenetre
 		this.pack();
+		//affiche la fenetre construite
 		this.setVisible(true);
 	}
 	
@@ -85,14 +94,12 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 	public void setHeight(int height) {
 		this.height = height;
 	}
-
 	public String getTitre() {
 		return titre;
 	}
 	public void setTitre(String titre) {
 		this.titre = titre;
 	}
-
 	public Color getForeground() {
 		return foreground;
 	}
@@ -119,18 +126,23 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 		JMenuBar menu = new JMenuBar();
 		
 		JMenu fileMenu = new JMenu("Fichier");
+		//créé du listener action du menu openItem vers la fenêtre en cours
 		openItem.addActionListener(this);
-		saveItem.addActionListener(this);
-		quitItem.addActionListener(this);
 		fileMenu.add(openItem);
+		//créé du listener action du menu saveItem vers la fenêtre en cours
+		saveItem.addActionListener(this);
 		fileMenu.add(saveItem);
+		//créé du listener action du menu quitItem vers la fenêtre en cours
+		quitItem.addActionListener(this);
 		fileMenu.add(quitItem);
 		menu.add(fileMenu);
 		
 		JMenu sensorMenu = new JMenu("Capteur");
+		//créé du listener action du menu addItem vers la fenêtre en cours
 		addItem.addActionListener(this);
-		deleteItem.addActionListener(this);
 		sensorMenu.add(addItem);
+		//créé du listener action du menu deleteItem vers la fenêtre en cours
+		deleteItem.addActionListener(this);
 		sensorMenu.add(deleteItem);
 		menu.add(sensorMenu);
 		
@@ -155,33 +167,37 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 	}
 
 	public void validateEdit(Sensor newSensor){
-		System.out.println("Bouton Valider");
+		//System.out.println("Bouton Valider");
 		this.sensors.updateElement(capteurListe.getSelectedIndex(), newSensor);
 	}
-
 	public void select(){
 		this.sensors.selectElement(capteurListe.getSelectedIndex());
 	}
 	
+	//prise en charge des retours pour les listeners propertyChange (quelqu'en soit la source)
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		//retour compteur de Mean
 		if (evt.getPropertyName().equals(Mean.COUNT_NAME)){
 			this.meanPane.setCount(evt.getNewValue().toString());
 			//System.out.println("Count = " + evt.getNewValue().toString());
 		}
+		//retour moyenne de Mean
 		if (evt.getPropertyName().equals(Mean.AVERAGE_NAME)){
 			this.meanPane.setMean(evt.getNewValue().toString());
 			//System.out.println("Mean = " + evt.getNewValue().toString());
 		}
+		//retour name de Sensorlist
 		if (evt.getPropertyName().equals(SensorModel.SELECT_NAME)){
 			this.editPane.setSensor((Sensor) evt.getNewValue());
 			//System.out.println("sensor = " + evt.getNewValue().toString());
 		}
 	}
 
+	//prise en charge des retours pour les listeners action interface (quelqu'en soit la source)
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-		//objet file pour la récupération du nom au  retour du dialogue de séléction
+		//retour du menu openItem
 		if(evt.getSource().equals(openItem)){
 			String filename = "";
 
@@ -190,6 +206,7 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 			//System.out.println("Filename = " + fileName);
 			if (filename.length()>0) sensors.openFile(filename);
 		}
+		//retour du menu saveItem
 		if(evt.getSource().equals(saveItem)){
 			String filename = "";
 
@@ -198,14 +215,16 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 			//System.out.println("Filename = " + fileName);
 			if (filename.length()>0) sensors.saveFile(filename);
 		}
+		//retour du menu quitItem
 		if(evt.getSource().equals(quitItem)){
 			//System.out.println("Menu Quitter");
 			System.exit(0);
 		}
+		//retour du menu addItem
 		if(evt.getSource().equals(addItem)){
 			Sensor local;
 				
-			System.out.println("Menu Ajouter");
+			//System.out.println("Menu Ajouter");
 			String baseName = "Nouveau";
 			int counter = 0;
 			String globalName = "";
@@ -219,11 +238,12 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 			this.sensors.addElement(local);
 			select();
 		}
+		//retour du menu deleteItem
 		if(evt.getSource().equals(deleteItem)){
 			int oldIndex;
 			int newIndex;
 			
-			System.out.println("Menu Supprimer");
+			//System.out.println("Menu Supprimer");
 			//récupère l'index de l'élément en cours
 			oldIndex = capteurListe.getSelectedIndex();
 			
@@ -239,6 +259,7 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 		}
 	}
 	
+	//gestion de la fenêtre de dialogue pour récupération d'un nom de fichier
 	private String getFilename(String dialogTitle, String fileType) {
 		int dialogState = 0;
 		File file;

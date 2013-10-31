@@ -15,17 +15,24 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+//Listener de l'objet Mean et support de listener pour la gestion de la liste de sensor
 public class SensorModel {
+	//objet permettant la gestion de retour pour des listeners
+	private PropertyChangeSupport pcs;
+	
+	//chaine d'identification pour les retours aux listeners
 	public final static String SELECT_NAME="sensor";
 
-	private PropertyChangeSupport pcs;
+	//variables locales
 	private DefaultListModel sensorList;
 	private Mean moyenne;
 
 	public SensorModel(){
+		//initialisation de la prise en charge des listener
 		pcs = new PropertyChangeSupport(this);
 		sensorList = new DefaultListModel();
 		moyenne = new Mean();
+		//créé des listeners vers l'objet moyenne pour tous les éléments de la listes 
 		bindMean();
 	}
 
@@ -35,6 +42,13 @@ public class SensorModel {
 	public void setSensorListe(DefaultListModel sensorList) {
 		this.sensorList = sensorList;
 	}
+	public Mean getMoyenne() {
+		return moyenne;
+	}
+	public void setMoyenne(Mean moyenne) {
+		this.moyenne = moyenne;
+	}
+
 	
 	public boolean existsElement(String name) {
 		boolean result = false;
@@ -50,13 +64,32 @@ public class SensorModel {
 	}
 	public void addElement(Sensor newSensor) {
 		this.sensorList.addElement(newSensor);
+		//active un listener vers l'objet moyenne pour l'objet sensor
+		newSensor.addPropertyChangeListener(moyenne);
 	}
 	public void updateElement(int index, Sensor newSensor){
-		this.sensorList.set(index, newSensor);
+		Sensor local;
+		if (!this.sensorList.isEmpty()){
+			//arrêt du sensor avant son remplacement
+			//pour éviter ne pollue les statistiques
+			//par son fantome dut au listener
+			local = (Sensor) this.sensorList.getElementAt(index);
+			local.stop();
+		
+			this.sensorList.set(index, newSensor);
+			//active un listener vers l'objet moyenne pour l'objet sensor
+			newSensor.addPropertyChangeListener(moyenne);
+		}
 	}
 	public void deleteElement(int index) {
+		Sensor local;
 		if (!this.sensorList.isEmpty()){
 			if (index >= 0 && index < this.sensorList.getSize()) {
+				//arrêt du sensor avant son retrait de la liste
+				//pour éviter ne pollue les statistiques
+				//par son fantome dut au listener
+				local = (Sensor) this.sensorList.getElementAt(index);
+				local.stop();
 				this.sensorList.remove(index);
 			}
 		}
@@ -64,16 +97,10 @@ public class SensorModel {
 	public void selectElement(int index) {
 		if (!this.sensorList.isEmpty()) {
 			if (index >= 0 && index < this.sensorList.getSize()) {
+				//envoi une notification aux listeners pour changement de selection
 				this.pcs.firePropertyChange(SensorModel.SELECT_NAME, null, this.sensorList.getElementAt(index));
 			}
 		}
-	}
-
-	public Mean getMoyenne() {
-		return moyenne;
-	}
-	public void setMoyenne(Mean moyenne) {
-		this.moyenne = moyenne;
 	}
 
 	public void openFile(String filename){
@@ -130,6 +157,7 @@ public class SensorModel {
 		}
 	}
 	
+	//active un listener vers l'objet moyenne pour chaque sensor de la liste
 	private void bindMean(){
 		Sensor local;
 		for (int index = 0; index < this.sensorList.getSize(); index++) {
@@ -138,6 +166,7 @@ public class SensorModel {
 		}
 	}
 	
+	//prise en charge des demande d'abonnement des listeners
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {
 		this.pcs.addPropertyChangeListener(pcl);
 	}
