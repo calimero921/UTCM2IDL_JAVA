@@ -28,7 +28,7 @@ public class SensorModel {
 	private Mean moyenne;
 
 	public SensorModel(){
-		//initialisation de la prise en charge des listener
+		//initialisation de la prise en charge des listeners
 		pcs = new PropertyChangeSupport(this);
 		sensorList = new DefaultListModel();
 		moyenne = new Mean();
@@ -48,7 +48,6 @@ public class SensorModel {
 	public void setMoyenne(Mean moyenne) {
 		this.moyenne = moyenne;
 	}
-
 	
 	public boolean existsElement(String name) {
 		boolean result = false;
@@ -71,7 +70,7 @@ public class SensorModel {
 		Sensor local;
 		if (!this.sensorList.isEmpty()){
 			//arrêt du sensor avant son remplacement
-			//pour éviter ne pollue les statistiques
+			//pour éviter de polluer les statistiques
 			//par son fantome dut au listener
 			local = (Sensor) this.sensorList.getElementAt(index);
 			local.stop();
@@ -86,7 +85,7 @@ public class SensorModel {
 		if (!this.sensorList.isEmpty()){
 			if (index >= 0 && index < this.sensorList.getSize()) {
 				//arrêt du sensor avant son retrait de la liste
-				//pour éviter ne pollue les statistiques
+				//pour éviter de polluer les statistiques
 				//par son fantome dut au listener
 				local = (Sensor) this.sensorList.getElementAt(index);
 				local.stop();
@@ -97,7 +96,7 @@ public class SensorModel {
 	public void selectElement(int index) {
 		if (!this.sensorList.isEmpty()) {
 			if (index >= 0 && index < this.sensorList.getSize()) {
-				//envoi une notification aux listeners pour changement de selection
+				//envoi une notification aux listeners sur changement de selection
 				this.pcs.firePropertyChange(SensorModel.SELECT_NAME, null, this.sensorList.getElementAt(index));
 			}
 		}
@@ -126,8 +125,7 @@ public class SensorModel {
 			while (jp.nextToken() == JsonToken.START_OBJECT){
 				local = mapper.readValue(jp, Sensor.class);
 				this.sensorList.addElement(local);
-				//System.out.println(localSensor.toString());				
-			}
+				}
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

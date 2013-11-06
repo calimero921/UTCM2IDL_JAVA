@@ -50,7 +50,6 @@ public class Mean implements PropertyChangeListener{
 			average = total/count;
 			//envoi une notification aux listeners pour le calcul de moyenne
 			this.pcs.firePropertyChange(AVERAGE_NAME, oldAverage, this.average);
-			//System.out.println("Valeur : " + evt.getNewValue() + " => Moyenne : " + average);
 		}
 	}
 	

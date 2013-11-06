@@ -1,7 +1,6 @@
 package Sensor;
 
 import java.awt.Color;
-//import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -118,7 +117,7 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 		this.setSize(this.width, this.height);
 		this.setTitle(this.titre);
 
-		//met au millieu de l'Ã©cran
+		//met au millieu de l'écran
 		this.setLocationRelativeTo(null);		
 	}
 	private void initMenu(){
@@ -151,7 +150,7 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 	private void initPanel(){
 		JSplitPane pan = new JSplitPane();
 
-		//crÃ©ation d'un JPanel
+		//création d'un JPanel
 		pan.setForeground(this.foreground);
 		pan.setBackground(this.background);
 				
@@ -167,7 +166,6 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 	}
 
 	public void validateEdit(Sensor newSensor){
-		//System.out.println("Bouton Valider");
 		this.sensors.updateElement(capteurListe.getSelectedIndex(), newSensor);
 	}
 	public void select(){
@@ -180,17 +178,14 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 		//retour compteur de Mean
 		if (evt.getPropertyName().equals(Mean.COUNT_NAME)){
 			this.meanPane.setCount(evt.getNewValue().toString());
-			//System.out.println("Count = " + evt.getNewValue().toString());
 		}
 		//retour moyenne de Mean
 		if (evt.getPropertyName().equals(Mean.AVERAGE_NAME)){
 			this.meanPane.setMean(evt.getNewValue().toString());
-			//System.out.println("Mean = " + evt.getNewValue().toString());
 		}
 		//retour name de Sensorlist
 		if (evt.getPropertyName().equals(SensorModel.SELECT_NAME)){
 			this.editPane.setSensor((Sensor) evt.getNewValue());
-			//System.out.println("sensor = " + evt.getNewValue().toString());
 		}
 	}
 
@@ -201,30 +196,24 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 		if(evt.getSource().equals(openItem)){
 			String filename = "";
 
-			//System.out.println("Menu Ouvrir");
 			filename = getFilename("Ouvrir", "*.JSON");
-			//System.out.println("Filename = " + fileName);
 			if (filename.length()>0) sensors.openFile(filename);
 		}
 		//retour du menu saveItem
 		if(evt.getSource().equals(saveItem)){
 			String filename = "";
 
-			//System.out.println("Menu Enregistrer");
 			filename = getFilename("Enregistrer", "*.JSON");
-			//System.out.println("Filename = " + fileName);
 			if (filename.length()>0) sensors.saveFile(filename);
 		}
 		//retour du menu quitItem
 		if(evt.getSource().equals(quitItem)){
-			//System.out.println("Menu Quitter");
 			System.exit(0);
 		}
 		//retour du menu addItem
 		if(evt.getSource().equals(addItem)){
 			Sensor local;
 				
-			//System.out.println("Menu Ajouter");
 			String baseName = "Nouveau";
 			int counter = 0;
 			String globalName = "";
@@ -243,7 +232,6 @@ public class SensorListFrame extends JFrame implements PropertyChangeListener, A
 			int oldIndex;
 			int newIndex;
 			
-			//System.out.println("Menu Supprimer");
 			//récupère l'index de l'élément en cours
 			oldIndex = capteurListe.getSelectedIndex();
 			

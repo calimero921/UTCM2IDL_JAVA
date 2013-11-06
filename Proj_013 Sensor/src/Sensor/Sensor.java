@@ -89,12 +89,11 @@ public class Sensor {
 	public void action(){
 		int oldValue = this.value;
 		this.value = randomGenerator.nextInt(11) + 5;
-		//System.out.println("valeur = " + this.value);
 		//envoi une notification aux listeners pour le changement de valeur
 		this.pcs.firePropertyChange(VALUE_NAME, oldValue, this.value);
 	}
 	
-	//prise en charge des demande d'abonnement des listeners
+	//prise en charge des demandes d'abonnement des listeners
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {
 		this.pcs.addPropertyChangeListener(pcl);
 	}
