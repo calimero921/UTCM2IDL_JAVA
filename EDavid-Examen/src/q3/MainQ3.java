@@ -1,7 +1,5 @@
 package q3;
 
-import java.awt.Color;
-
 public class MainQ3 {
 
 	/**
