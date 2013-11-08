@@ -19,12 +19,16 @@ public class Values {
 	}
 
 	public void sendValues() {
+		int oldValue = 0;
+		int newValue;
 		ArrayList<Integer> val = getDefaultVal();
 		for (Integer n : val) {
 			/*
 			 * Affichage des valeurs
 			 */
-			System.out.println(n);
+			newValue = n;
+			this.pcs.firePropertyChange("VALUE", oldValue, newValue);
+			//System.out.println(n);
 			try {
 				/*
 				 * Temporise DELAY millisecondes
